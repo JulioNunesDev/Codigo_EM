@@ -107,23 +107,26 @@ router.get('/postagens', eAdmin, (req, res) => {
 })
 
 
-router.post('/postagensInput', eAdmin, (req, res) => {
-    let dadosInput = req.body.livroID
-    console.log(dadosInput)
+// FUNTION REGEX
+function escapeRegExp (string){
+    if(string){
+        return string.replace(".*[^ \d]", '')
+    }
+}
 
-    if(!dadosInput || typeof req.body.livroID == undefined || req.body.livroID == null) {
+
+router.get('/postagensquery', eAdmin, async (req, res) => {
+    let dadosLivroID = req.query.livroID
+    console.log(dadosLivroID)
+
+    if(!dadosLivroID || typeof req.query.livroID == undefined || req.query.livroID == null) {
         req.flash('error_msg', 'Nao pode ser um campo vazio!')
         res.redirect('/admin/postagens')
     }
     
-    Postagem.find({titulo: dadosInput}).lean().populate("categoria").sort({data:"desc"}).then((postagens)=>{
-        res.render('admin/postagens_v1', {postagens: postagens, styles: 'index.css'})
-    })
-    .catch((err)=>{
-        req.flash('error_msg', 'Houve um erro ao carregar o formulario')
-        res.render('/admin/postagens')
-    })
-   
+    let postsBookEdit = await Postagem.find({NOME: {$regex: new RegExp(escapeRegExp(dadosLivroID), 'i')}}).lean().populate("categoria")
+    console.log(postsBookEdit)
+    res.render('admin/postagens_v1', {postagens: postsBookEdit, styles: 'index.css'})
 })
 
 
@@ -159,7 +162,7 @@ router.post('/postagens/nova', eAdmin, (req, res)=>{
             ANO: req.body.ano,
             EDITORA: req.body.editora,
             ORIGEM: req.body.origem,
-            LOCALIZACAO: req.body.localizacao,
+            LOCALIZAÇÃO: req.body.localizacao,
             EXEMPLARES: req.body.exemplares,
             DATA: req.body.data,
             categoria: req.body.categoria

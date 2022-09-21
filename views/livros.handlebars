@@ -16,11 +16,11 @@
     <h1>Bem-vindo a biblioteca</h1>
 
     <div class="box-form">
-      <form action="/news" method="post">
+      <form action="http://localhost:8081/news" method="get">
         <input
           type="text"
           class="form-control"
-          name="test"
+          name="payload"
           placeholder="Nome do livro"
         />
         <button type="submit">Pesquisar</button>
@@ -33,7 +33,7 @@
 
   <section class="content-down">
 
-    {{#each livros}}
+    {{#each posts}}
 
       <div class="card-one">
         <div class="card-body-one">
@@ -48,7 +48,7 @@
         </div>
 
         <div class="card-body-down">
-            <h5>{{categoria.nome}}</h5>
+            {{!-- <h5>{{categoria.nome}}</h5> --}}
             {{!-- <small>Data de publicação: {{categoria.nome}}</small> --}}
         </div>
            

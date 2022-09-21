@@ -3,8 +3,6 @@
 {{else}}
 
 {{/each}}
-
-
 <section class="conteiner-main">
   <div class="content-top">
     <div>
@@ -16,12 +14,13 @@
     <h1>Bem-vindo a biblioteca</h1>
 
     <div class="box-form">
-      <form action="/news" method="post">
+      <form action="/books" method="GET">
         <input
           type="text"
           class="form-control"
-          name="test"
+          name="payload"
           placeholder="Nome do livro"
+        
         />
         <button type="submit">Pesquisar</button>
       </form>
@@ -32,9 +31,7 @@
   {{!-- <h2 >Livros: </h2> --}}
 
   <section class="content-down">
-
     {{#each postagens}}
-
       <div class="card-one">
         <div class="card-body-one">
             <h4>{{NOME}}</h4>
@@ -48,14 +45,14 @@
 
         <div class="card-body-down">
             <h5>{{categoria.nome}}</h5>
-            {{!-- <small>Data de publicação: {{categoria.nome}}</small> --}}
+            <small>Data de publicação: {{categoria.nome}}</small>
         </div>
            
       </div>
 
     {{else}}
       <h5>Nenhum Livro encontrado!</h5>
-    {{/each}}
+    {{/each}} 
 
-  </section>
+  </section> 
 </section>
