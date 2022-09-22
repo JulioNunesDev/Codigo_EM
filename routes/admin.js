@@ -25,27 +25,45 @@ router.post('/categorias/nova', eAdmin, (req, res) => {
     const erros = []
     if (!nome || typeof nome == undefined || nome == null) {
         erros.push({ texto: "Nome Inválido!" })
+       
     }
     if (!slug || typeof slug == undefined || slug == null) {
         erros.push({ texto: "Slug Inválido!" })
+     
     }
-    if (slug.length < 2) {
+    if (slug.length < 1) {
         erros.push({ texto: "Nome de slug muito pequeno!" })
     }
     if (erros.length > 0) {
-        res.render('admin/addcategorias', { erros: erros })
-    } else {
-        try {
-            const novaCategoria = new Categoria({ nome: nome, slug: slug })
-            novaCategoria.save()
-            req.flash('success_msg', 'Categoria criada com sucesso!')
-            res.redirect('/admin/categorias')
-        } catch (error) {
-            req.flash('error_msg', 'Houve um erro ao criar categoria, tente novamente!')
-            res.redirect('/admin')
+        res.render('admin/addcategorias', { erros: erros, styles: "index.css" })
+        return
+    } 
+
+    //VERIFICAO NOME CATEGORIA
+
+ Categoria.findOne({nome: req.body.nome}).then((categoria)=>{
+        console.log(categoria)
+        if(categoria){
+                req.flash('error_msg', 'Já existe uma categoria com esse "Nome": ' + req.body.nome)
+                res.redirect('/admin/categorias')
+                return
+            }
+        else {
+            try {
+                const novaCategoria = new Categoria({ nome: nome, slug: slug })
+                novaCategoria.save()
+                req.flash('success_msg', 'Categoria criada com sucesso!')
+                res.redirect('/admin/categorias')
+            } catch (error) {
+                req.flash('error_msg', 'Houve um erro ao criar categoria, tente novamente!')
+                res.redirect('/admin')
+            }
         }
-    }
+    
+    })
 })
+
+
     router.get('/categorias/add', eAdmin, (req, res) => {
     res.render('admin/addcategorias', {styles: 'index.css'})
 })
